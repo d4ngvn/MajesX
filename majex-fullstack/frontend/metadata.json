@@ -1,0 +1,7 @@
+{
+  "name": "MajeX Residential",
+  "description": "A comprehensive residential management platform for connecting residents, managing payments, booking amenities, and administration.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
