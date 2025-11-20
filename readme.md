@@ -38,7 +38,7 @@ python seed.py
 
 - Sau khi chạy cả backend và frontend, truy cập URL hiển thị trên terminal để kiểm tra. ví dụ ` http://localhost:3000/`
 
-# Các lỗi cần cải thiện
+# Các lỗi cần cải thiện (có thể còn thiếu)
 - Không thể trả lời report của resident (không ấn được).
 - Upcoming booking của user chưa được cập nhật.
 - Không gửi được thông báo đến tất cả (Error saving message: 'senderId'), user không nhận được thông báo từ admin.
