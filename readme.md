@@ -36,7 +36,7 @@ python reset.py
 python seed.py
 ```
 
-- Sau khi chạy cả backend và frontend, truy cập URL hiển thị trên terminal để kiểm tra.
+- Sau khi chạy cả backend và frontend, truy cập URL hiển thị trên terminal để kiểm tra. ví dụ ` http://localhost:3000/`
 
 # Các lỗi cần cải thiện
 - Không thể trả lời report của resident (không ấn được).
