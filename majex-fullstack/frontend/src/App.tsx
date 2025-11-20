@@ -71,12 +71,13 @@ export default function App() {
     if (isLoggedIn && currentUser) {
       const fetchData = async () => {
         try {
-          // A. Load các dữ liệu chung (Facilities, Chat History, Announcements, Bookings)
-          const [fetchedFacilities, fetchedMessages, fetchedAnnouncements, fetchedBookings] = await Promise.all([
+          // A. Load các dữ liệu chung (Facilities, Chat History, Announcements, Bookings, Users)
+          const [fetchedFacilities, fetchedMessages, fetchedAnnouncements, fetchedBookings, fetchedUsers] = await Promise.all([
             api.getFacilities(),
             api.getMessages(),
             api.getAnnouncements ? api.getAnnouncements() : Promise.resolve([]),
-            api.getBookings ? api.getBookings() : Promise.resolve([])
+            api.getBookings ? api.getBookings() : Promise.resolve([]),
+            api.getUsers ? api.getUsers() : Promise.resolve([])
           ]);
 
           setFacilities(fetchedFacilities || []);
@@ -84,28 +85,27 @@ export default function App() {
           setAnnouncements(fetchedAnnouncements || []);
           setBookings(fetchedBookings || []);
 
+          // Map API user objects to ResidentRecord shape (safe normalization)
+          const mappedResidents: ResidentRecord[] = (fetchedUsers || []).map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            username: u.username || u.name?.toLowerCase().replace(/\s+/g, '-') || u.id,
+            apartment: u.apartmentId || u.apartment || 'N/A',
+            phone: u.phone || '',
+            email: u.email || '',
+            status: u.status || 'active',
+            password: '***'
+          }));
+          setResidents(mappedResidents);
+
           // B. Load dữ liệu riêng theo Role
           if (currentUser.role === UserRole.ADMIN) {
-             // Admin: Cần danh sách Cư dân và tất cả Báo cáo (+ all bills)
-             const [fetchedUsers, fetchedReports, fetchedAllBills] = await Promise.all([
-                api.getUsers(),
+             // Admin: Cần danh sách Báo cáo (+ all bills)
+             const [fetchedReports, fetchedAllBills] = await Promise.all([
                 api.getReports(),
                 api.getMyBills ? api.getMyBills('all') : Promise.resolve([])
              ]);
              
-             // Map User API response sang format ResidentRecord của frontend
-             const mappedResidents: ResidentRecord[] = (fetchedUsers || []).map((u: any) => ({
-                id: u.id,
-                name: u.name,
-                username: u.username,
-                apartment: u.apartmentId || 'N/A',
-                phone: u.phone,
-                email: u.email,
-                status: u.status,
-                password: '***'
-             }));
-             
-             setResidents(mappedResidents);
              setReports(fetchedReports || []);
              setBills(fetchedAllBills || []);
 
